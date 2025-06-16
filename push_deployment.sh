@@ -13,7 +13,7 @@ GITHUB_REPO_URL="https://github.com/randumduck/upsc-daily-news-digest.git"
 PROJECT_ROOT="/home/hunter/Desktop/freshrss_app"
 
 # Your Docker Hub username
-DOCKERHUB_USERNAME="randumduck69" # <--- IMPORTANT: Fill in your Docker Hub username here
+DOCKERHUB_USERNAME="randumduck69" # <--- IMPORTANT: Fill in your Docker Hub username here if not already.
 # The name for your Docker image on Docker Hub
 # This should typically match your service name, or be more generic (e.g., "news-feeder")
 DOCKER_IMAGE_NAME="freshrss_app-news-feeder" # Matches the default name from docker compose build news-feeder
@@ -52,58 +52,29 @@ push_to_github() {
   echo -e "\n--- Pushing to GitHub (Forcefully) ---"
   cd "$PROJECT_ROOT" || { echo "Error: Could not change to project directory for Git operations."; exit 1; }
 
+  # Ensure the local branch is named 'main'. This handles both new repos (defaulting to 'master')
+  # and existing repos that might have a different branch name.
+  # This command is crucial for resolving 'src refspec main does not match any' errors.
+  git branch -M main
+  if [ $? -ne 0 ]; then
+      echo "Error: Failed to set local branch name to 'main'. Aborting Git push."
+      exit 1
+  fi
+  echo "Ensured local branch is named 'main'."
+
   # --- Handle Fresh Setup (Not a Git Repository Yet) ---
   if [ ! -d "$PROJECT_ROOT/.git" ]; then
-    echo "Directory is not a Git repository. Initializing and preparing for first force push..."
-    git init
+    echo "Directory is not a Git repository. Initializing and preparing for first push..."
+    git init # This initializes the repo. The branch name is handled by 'git branch -M main' above.
     if [ $? -ne 0 ]; then echo "Error: Failed to initialize Git repository."; exit 1; fi
 
     git remote add origin "$GITHUB_REPO_URL"
     if [ $? -ne 0 ]; then echo "Error: Failed to add remote origin."; exit 1; fi
 
-    git add .
-    if [ $? -ne 0 ]; then echo "Error: Failed to add files during initial setup."; exit 1; fi
-
-    # Perform the initial commit for the newly initialized repo
-    # Check if there are changes to commit (excluding files ignored by .gitignore or unreadable due to permissions)
-    if ! git diff-index --quiet HEAD --; then
-        git commit -m "Initial commit from script setup"
-        if [ $? -ne 0 ]; then
-            echo "Error: Failed to commit during initial setup. This might be due to unreadable files."
-            exit 1
-        fi
-    else
-        echo "No new changes to commit during initial setup (directory might be empty or only contains ignored/unreadable files)."
-        # Even if no changes, we need a branch to push. The `git branch -M main` and subsequent push will establish 'main'.
-    fi
-
-    # Ensure the local branch is named 'main'. This is CRUCIAL.
-    git branch -M main
-
-    # Initial force push for new repos or to overwrite existing remote 'main'
-    echo -e "\nWARNING: This is an initial push or forceful overwrite. The remote 'main' branch will be made to match your local state."
-    echo "This can lead to lost work if the remote had different history. Confirm carefully!"
-    read -p "Are you sure you want to proceed with this initial/forceful GitHub push? (yes/no): " confirm_push
-    if [[ "$confirm_push" != "yes" ]]; then
-      echo "GitHub push aborted by user."
-      return 1 # Indicate that this function did not complete successfully
-    fi
-
-    echo "Pushing initial setup to '$GITHUB_REPO_URL' 'main' branch (using --force-with-lease)..."
-    # The -u flag sets the upstream branch, making future 'git push' simpler.
-    git push -u origin main --force-with-lease
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to push initial setup to GitHub. This might require manual intervention (e.g., if remote repo is completely empty and expects an initial commit, or credentials issue)."
-        exit 1
-    fi
-    echo "Initial repository setup and force push complete."
-    return 0 # Exit this function successfully after handling the initial push
+    echo "New Git repository initialized and remote 'origin' added."
   fi
 
-  # --- Existing Repo Flow (if .git already exists) ---
-  # If we reach here, it means .git exists, so it's an existing repo.
-  # The rest of the function remains the same for existing repo pushes.
-
+  # --- Common Logic for both Fresh and Existing Repos ---
   # Add all changes to the staging area
   echo "Adding all changes to Git staging area..."
   git add .
@@ -134,7 +105,8 @@ push_to_github() {
   fi
 
   echo "Force pushing to '$GITHUB_REPO_URL' 'main' branch..."
-  git push --force-with-lease origin main
+  # -u flag sets the upstream, allowing future 'git push' without specifying origin main.
+  git push -u origin main --force-with-lease
   if [ $? -ne 0 ]; then
     echo "Error: Failed to force push to GitHub. Check your credentials and repository URL."
     echo "If you have 2FA enabled, ensure you are using a Personal Access Token (PAT)."
