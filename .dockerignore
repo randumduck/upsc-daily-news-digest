@@ -1,0 +1,11 @@
+# Ignore Docker volume directories (crucial for this error)
+data/
+
+# Optionally ignore other files/directories not needed in the Docker image
+.git/
+.gitignore
+.env
+venv/
+*.pyc
+__pycache__/
+*.swp
