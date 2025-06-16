@@ -1,0 +1,58 @@
+# .github/workflows/daily-digest.yml
+name: Daily News Digest Publisher
+
+on:
+  schedule:
+    # Runs every 2 hours (at minute 0 of every second hour, e.g., 00:00, 02:00, 04:00 UTC etc.)
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    
+    # Grant write permissions to the GITHUB_TOKEN for pushing changes
+    permissions:
+      contents: write # This grants write access to the repository contents, essential for git-auto-commit-action
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Removed the separate 'Set Commit Date' step, as we'll set it directly in the auto-commit action
+
+      # NEW: Build the Docker image for your news feeder application
+      - name: Build Docker image
+        id: build-image
+        uses: docker/build-push-action@v5 # Using a recent version of build-push-action
+        with:
+          context: . # Build context is the current directory (where Dockerfile is)
+          push: false # Don't push to a registry, just build locally on the runner
+          tags: news-feeder:latest # Tag the image for local use
+
+      # NEW: Run your Python script inside the Docker container
+      # This replaces 'Set up Python', 'Install Python dependencies', and 'Run news feeder script'
+      - name: Run news feeder script inside Docker
+        run: docker run --rm -v ${{ github.workspace }}/data:/app/data -v ${{ github.workspace }}/docs:/app/docs news-feeder:latest
+        # The 'env:' block was causing a YAML parsing error due to incorrect commenting/indentation.
+        # As config.py is now included directly in the repo, these are often not needed for RSS feeds.
+        # If you need environment variables later (e.g., for webhooks), uncomment carefully.
+        # env:
+          # WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }} # Example for a webhook
+          # ENABLE_WEBHOOK_DELIVERY: ${{ secrets.ENABLE_WEBHOOK_DELIVERY }} # Pass as string "true" or "false"
+          # ARTICLES_PER_FEED: ${{ secrets.ARTICLES_PER_FEED }} # Pass as string "10"
+
+      # Existing step: Check what files were generated and if they exist
+      - name: Check generated files
+        run: |
+          ls -l docs/
+          git status
+
+      - name: Commit and push new digests to GitHub Pages
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          # Using a direct format of the current date for the commit message
+          commit_message: "Automated: Update daily news digest for $(date +'%Y-%m-%d %H:%M:%S')"
+          file_pattern: 'docs/*.html' # Ensures only generated HTML files are committed
+          branch: main # This should be the branch configured for GitHub Pages
+        # Removed the 'env: COMMIT_DATE' block as it's no longer needed here
