@@ -64,15 +64,21 @@ push_to_github() {
     git add .
     if [ $? -ne 0 ]; then echo "Error: Failed to add files during initial setup."; exit 1; fi
 
+    # Perform the initial commit for the newly initialized repo
+    # Check if there are changes to commit (excluding files ignored by .gitignore or unreadable due to permissions)
     if ! git diff-index --quiet HEAD --; then
-        # Only commit if there are actual changes
         git commit -m "Initial commit from script setup"
-        if [ $? -ne 0 ]; then echo "Error: Failed to commit during initial setup."; exit 1; fi
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to commit during initial setup. This might be due to unreadable files."
+            exit 1
+        fi
     else
-        echo "No new changes to commit during initial setup (directory might be empty)."
+        echo "No new changes to commit during initial setup (directory might be empty or only contains ignored/unreadable files)."
+        # Even if no changes, we need a branch to push. The `git branch -M main` and subsequent push will establish 'main'.
     fi
 
-    git branch -M main # Ensure local branch is named 'main'
+    # Ensure the local branch is named 'main'. This is CRUCIAL.
+    git branch -M main
 
     # Initial force push for new repos or to overwrite existing remote 'main'
     echo -e "\nWARNING: This is an initial push or forceful overwrite. The remote 'main' branch will be made to match your local state."
@@ -84,9 +90,10 @@ push_to_github() {
     fi
 
     echo "Pushing initial setup to '$GITHUB_REPO_URL' 'main' branch (using --force-with-lease)..."
+    # The -u flag sets the upstream branch, making future 'git push' simpler.
     git push -u origin main --force-with-lease
     if [ $? -ne 0 ]; then
-        echo "Error: Failed to push initial setup to GitHub. This might require manual intervention."
+        echo "Error: Failed to push initial setup to GitHub. This might require manual intervention (e.g., if remote repo is completely empty and expects an initial commit, or credentials issue)."
         exit 1
     fi
     echo "Initial repository setup and force push complete."
@@ -119,7 +126,7 @@ push_to_github() {
 
   # Force push to GitHub (using --force-with-lease for safer overwrite)
   echo -e "\nWARNING: This will forcefully overwrite the 'main' branch on GitHub!"
-  echo "Use with extreme caution. This can lead to lost work for collaborators."
+  echo "Use it with extreme caution. This can lead to lost work for collaborators."
   read -p "Are you sure you want to proceed with forceful GitHub push? (yes/no): " confirm_push
   if [[ "$confirm_push" != "yes" ]]; then
     echo "GitHub push aborted by user."
