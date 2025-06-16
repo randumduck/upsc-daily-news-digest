@@ -1,0 +1,58 @@
+# ~/freshrss_app/docker-compose.yml
+services:
+  # PostgreSQL Database Service
+  db:
+    image: postgres:15-alpine # Lightweight PostgreSQL image
+    container_name: freshrss_db
+    env_file:
+      - .env                  # Load database credentials from .env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data # Persistent storage for database data
+    restart: unless-stopped   # Always restart unless manually stopped
+    healthcheck: # Ensure database is ready before FreshRSS connects
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FreshRSS Application Service
+  freshrss:
+    image: freshrss/freshrss:latest # Official FreshRSS Docker image
+    container_name: freshrss_app
+    env_file:
+      - .env                  # Load FreshRSS configuration from .env
+    ports:
+      - "80:80"               # Map host port 80 to container port 80 (HTTP)
+      # - "443:443"           # Uncomment and configure for HTTPS (more advanced)
+    volumes:
+      - ./data/freshrss:/var/www/FreshRSS/data # Persistent storage for FreshRSS data (config, cache)
+    depends_on:
+      db:
+        condition: service_healthy # Ensure DB is healthy before starting FreshRSS
+    restart: unless-stopped       # Always restart unless manually stopped
+    # If you want FreshRSS to update feeds automatically, set a cron job or enable its internal cron:
+    # command: --enable-background-update # uncomment this if you prefer internal update
+
+  # NEW: News Feeder Application Service
+  news-feeder:
+    build: .                 # Build the image from the Dockerfile in the current directory
+    container_name: news_feeder_app
+    volumes:
+      # Mount the 'data' directory for the SQLite database persistence
+      - ./data:/app/data
+      # Mount the 'docs' directory for the generated HTML files
+      - ./docs:/app/docs
+      # Mount config.py and requirements.txt for the build context
+      - ./config.py:/app/config.py
+      - ./requirements.txt:/app/requirements.txt
+      # Mount the script itself
+      - ./news_feeder.py:/app/news_feeder.py
+    # Remove 'restart: unless-stopped' if you only want it to run on demand (e.g., from cron)
+    # If you want it to run once when compose starts, you can remove restart policy.
+    # If you want it to run periodically, you'd trigger it with 'docker compose exec' or a cronjob from host.
+    # For now, let's set it to 'no' restart, assuming you'll trigger it manually or via cron.
+    restart: "no" # Or 'on-failure', or remove for one-shot execution
+    # depends_on:
+      # No direct dependency on db/freshrss if it's using its own SQLite db.
+      # If it were to connect to the postgres db, you'd add 'db:' here.
+

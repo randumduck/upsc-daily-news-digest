@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml xmlns:frss="https://freshrss.org/opml" version="2.0">
+  <head>
+    <title>FreshRSS</title>
+    <dateCreated>Mon, 16 Jun 2025 19:21:00 +0000</dateCreated>
+  </head>
+  <body>
+    <outline text="The Hindu">
+      <outline text="Interviews" type="rss" xmlUrl="https://www.thehindu.com/opinion/interview/feeder/default.rss" htmlUrl="https://www.thehindu.com/opinion/interview/" description="Interviews with leading personalities from politics, business, arts, and entertainment."/>
+      <outline text="Columns" type="rss" xmlUrl="https://www.thehindu.com/opinion/columns/feeder/default.rss" htmlUrl="https://www.thehindu.com/opinion/columns/" description="Opinion columns on trending topics from politics, sports, business, and entertainment."/>
+      <outline text="Open Page" type="rss" xmlUrl="https://www.thehindu.com/opinion/open-page/feeder/default.rss" htmlUrl="https://www.thehindu.com/opinion/open-page/" description="Reader-submitted articles and opinions on current topics."/>
+      <outline text="Readers' Editor" type="rss" xmlUrl="https://www.thehindu.com/opinion/Readers-Editor/feeder/default.rss" htmlUrl="https://www.thehindu.com/opinion/Readers-Editor/" description="Editorial insights and reader feedback from The Hindu."/>
+      <outline text="Editorials" type="rss" xmlUrl="https://www.thehindu.com/opinion/editorial/feeder/default.rss" htmlUrl="https://www.thehindu.com/opinion/editorial/" description="Editorials on current affairs and major issues."/>
+      <outline text="National News" type="rss" xmlUrl="https://www.thehindu.com/news/national/feeder/default.rss" htmlUrl="https://www.thehindu.com/news/national/" description="National news coverage from The Hindu."/>
+      <outline text="General News" type="rss" xmlUrl="https://www.thehindu.com/news/feeder/default.rss" htmlUrl="https://www.thehindu.com/news/" description="Latest news and updates from The Hindu."/>
+      <outline text="Main Feed" type="rss" xmlUrl="https://www.thehindu.com/feeder/default.rss" htmlUrl="https://www.thehindu.com/" description="Main RSS feed from The Hindu."/>
+      <outline text="Budget" type="rss" xmlUrl="https://www.thehindu.com/business/budget/feeder/default.rss" htmlUrl="https://www.thehindu.com/business/budget/" description="Coverage of the Indian budget and related news."/>
+      <outline text="Sports" type="rss" xmlUrl="https://www.thehindu.com/sport/feeder/default.rss" htmlUrl="https://www.thehindu.com/sport/" description="Sports news and updates from The Hindu."/>
+      <outline text="Entertainment" type="rss" xmlUrl="https://www.thehindu.com/entertainment/feeder/default.rss" htmlUrl="https://www.thehindu.com/entertainment/" description="Entertainment news and features."/>
+      <outline text="Science" type="rss" xmlUrl="https://www.thehindu.com/sci-tech/science/feeder/default.rss" htmlUrl="https://www.thehindu.com/sci-tech/science/" description="Science and technology news."/>
+    </outline>
+
+    <outline text="Indian Express">
+      <outline text="Latest News (All)" type="rss" xmlUrl="https://indianexpress.com/feed/" htmlUrl="https://indianexpress.com/" description="Latest news and updates from Indian Express."/>
+      <outline text="India News" type="rss" xmlUrl="https://indianexpress.com/section/india/feed/" htmlUrl="https://indianexpress.com/section/india/" description="News and updates from across India."/>
+      <outline text="Explained" type="rss" xmlUrl="https://indianexpress.com/section/explained/feed/" htmlUrl="https://indianexpress.com/section/explained/" description="In-depth explanations of current events and issues."/>
+      <outline text="Opinion" type="rss" xmlUrl="https://indianexpress.com/section/opinion/feed/" htmlUrl="https://indianexpress.com/section/opinion/" description="Opinions and editorials from Indian Express."/>
+      <outline text="Politics" type="rss" xmlUrl="https://indianexpress.com/section/political-pulse/feed/" htmlUrl="https://indianexpress.com/section/political-pulse/" description="Political news and analysis."/>
+    </outline>
+
+    <outline text="Press Information Bureau (PIB)">
+      <outline text="All Releases (English)" type="rss" xmlUrl="https://pib.gov.in/AllRelease.aspx?PRID=1" htmlUrl="https://pib.gov.in/" description="Official press releases from the Government of India."/>
+    </outline>
+  </body>
+</opml>

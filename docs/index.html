@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>UPSC Daily News Digests Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background-light: #f9fafb;
+    --text-light: #1f2937;
+    --card-bg-light: #ffffff;
+    --border-light: #e5e7eb;
+    --primary-light: #2563eb;
+    --header-bg-light: #dbeafe; /* Lighter blue for header in light mode */
+  }
+
+  [data-theme='dark'] {
+    --background-light: #111827;
+    --text-light: #e5e7eb;
+    --card-bg-light: #1f2937;
+    --border-light: #374151;
+    --primary-light: #60a5fa;
+    --header-bg-light: #1f2937; /* Darker blue for header in dark mode */
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+    color: var(--text-light);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--background-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    .container {
+      margin: 10px;
+      padding: 15px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+  h1 {
+    color: var(--primary-light);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 700;
+  }
+  h2 {
+    color: var(--primary-light);
+    margin-top: 35px;
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 10px;
+    font-size: 1.6em;
+    font-weight: 600;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    background-color: var(--card-bg-light);
+    border: 1px solid var(--border-light);
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  li:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  a {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  p {
+    margin-top: 10px;
+    color: var(--text-light);
+  }
+  .footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.85em;
+    color: #777;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+  }
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: var(--card-bg-light);
+    color: var(--primary-light);
+    border: 1px solid var(--border-light);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+  }
+  .theme-toggle:hover {
+    background-color: var(--primary-light);
+    color: var(--card-bg-light);
+  }
+  /* Hide one icon based on theme */
+  [data-theme='light'] .icon-dark { display: none; }
+  [data-theme='dark'] .icon-light { display: none; }
+</style>
+</head>
+<body>
+  <div class="container">
+    
+    <button id="theme-toggle" class="theme-toggle">
+        <span class="icon-light" role="img" aria-label="Light Mode">&#9728;</span>
+        <span class="icon-dark" role="img" aria-label="Dark Mode">&#9790;</span>
+    </button>
+    
+<h1>UPSC Daily News Digests Archive</h1>
+    <ul>
+        <li><a href='./2025-06-16_daily_digest.html'>Daily Digest for 2025-06-16</a></li>
+    </ul>
+</div>
+</body>
+</html>
