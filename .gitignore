@@ -1,0 +1,16 @@
+# Ignore Docker volume directories
+data/
+
+# Ignore Python virtual environments
+venv/
+.venv/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore .env files for sensitive data
+.env
+
+# Ignore common editor/OS files
+*.swp
